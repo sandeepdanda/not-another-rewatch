@@ -1,37 +1,36 @@
-# Movie Database Management System 🎬
+# Not Another Rewatch 🎬
 
-A data engineering project featuring a normalized relational database with 600,000+ movie records, SQL analytics, Python ETL pipeline, and Power BI dashboards.
+Stop rewatching the same stuff. Let AI find you something new.
 
-## Features
+A full-stack movie discovery and tracking platform powered by AI - semantic search, personalized recommendations, and a conversational movie expert that actually knows 600,000+ films.
 
-- **Normalized Database** — 3NF schema with ER modeling for movies, actors, directors, genres, and ratings
-- **SQL Analytics** — Complex queries for revenue analysis, genre trends, rating distributions
-- **Python ETL** — Automated data ingestion and preprocessing pipeline
-- **Power BI Dashboard** — Interactive visualizations for box office performance and audience insights
+> **Status:** Early development. See [Phase Plan](docs/phase-plan.md) for the roadmap.
+
+## What It Does
+
+- **AI-powered search** - "movies about loneliness in space" actually works
+- **Movie discovery chat** - "I liked Inception but want something funnier" gets real answers
+- **Personal tracking** - rate movies, build a watchlist, log your diary
+- **Smart recommendations** - based on your taste, not just popularity
+- **600K+ movies** with cast, crew, genres, ratings, and streaming info
 
 ## Tech Stack
 
-| Component     | Technology                                 |
-| ------------- | ------------------------------------------ |
-| Database      | PostgreSQL                                 |
-| ETL           | Python, Pandas, SQLAlchemy                 |
-| Analytics     | SQL (window functions, CTEs, aggregations) |
-| Visualization | Power BI                                   |
+| Layer | Technology |
+|-------|-----------|
+| Frontend | React + TypeScript + Vite |
+| Backend | Java 21 + Spring Boot 3.4 |
+| Database | DynamoDB (single-table design) |
+| AI | OpenAI (embeddings + chat) |
+| Search | Semantic vector search + full-text |
+| Data | TMDB API + Kaggle Movies Dataset |
 
 ## Getting Started
 
 ```bash
-pip install -r requirements.txt
-psql -U postgres -f sql/schema.sql
-python etl/extract.py
-python etl/transform.py
-python etl/load.py
+# Coming soon - Docker Compose one-liner
+docker compose up
 ```
-
-## Results
-
-- 20% improvement in query performance through proper normalization and indexing
-- Interactive dashboard integrating data from multiple sources
 
 ## License
 
