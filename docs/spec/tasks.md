@@ -11,7 +11,7 @@ Estimates: S = 1-2 hrs, M = 3-5 hrs, L = 6-10 hrs
 | # | Task | Size | Deps | Acceptance Criteria |
 |---|------|------|------|-------------------|
 | 1.1.1 | Create monorepo structure, .gitignore, .editorconfig | S | - | `/backend`, `/frontend`, `/etl`, `/infra` dirs. Ignores target/, node_modules/, .env |
-| 1.1.2 | Init Spring Boot project | M | 1.1.1 | `mvn clean compile` passes. Java 21, Spring Boot 3.4, Spring Web, AWS SDK v2, springdoc-openapi in pom.xml. Virtual threads enabled in application.yml |
+| 1.1.2 | Init Spring Boot project | M | 1.1.1 | `./gradlew build` passes. Java 21, Spring Boot 3.5, Spring Web, AWS SDK v2, springdoc-openapi in build.gradle. Virtual threads enabled in application.yml |
 | 1.1.3 | Init React+TS project with Vite | S | 1.1.1 | `npm run dev` starts. TypeScript strict mode, TanStack Query + Router, Tailwind + shadcn/ui configured |
 | 1.1.4 | Create .env.example | S | 1.1.2 | Lists all required env vars: AWS_ENDPOINT, OPENAI_API_KEY, TMDB_API_KEY, JWT_SECRET, DATABASE_URL |
 

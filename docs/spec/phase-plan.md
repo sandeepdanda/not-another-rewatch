@@ -9,7 +9,7 @@ A full-stack movie discovery and tracking platform with AI-powered search, recom
 | Layer | Choice | Notes |
 |-------|--------|-------|
 | Frontend | React 18 + TypeScript + Vite | TanStack Query + Router, Tailwind + shadcn/ui |
-| Backend | Java 21 + Spring Boot 3.4 | Virtual threads, records, Spring AI |
+| Backend | Java 21 + Spring Boot 3.5 | Virtual threads, records, Spring AI |
 | Database | DynamoDB (single-table design) | Hybrid 2-table: MovieCatalog + UserActivity |
 | Vector Search | Amazon S3 Vectors (or Pinecone free tier) | For AI-powered semantic search |
 | AI | OpenAI API (embeddings + chat) | text-embedding-3-small + gpt-4o-mini |

@@ -47,7 +47,7 @@ graph TB
 | Component | Technology | Purpose |
 |-----------|-----------|---------|
 | React SPA | React 18, TypeScript, Vite, TanStack Query | Movie browsing, search, chat, personal tracking |
-| Spring Boot API | Java 21, Spring Boot 3.4, Spring AI | REST endpoints, AI orchestration, auth, caching |
+| Spring Boot API | Java 21, Spring Boot 3.5, Spring AI | REST endpoints, AI orchestration, auth, caching |
 | MovieCatalog | DynamoDB (single-table) | All movie data: metadata, cast, crew, genres |
 | UserActivity | DynamoDB (separate table) | User profiles, watchlists, ratings, diary entries |
 | Vector Store | S3 Vectors or Pinecone | Movie embeddings for semantic search + recommendations |
@@ -373,7 +373,7 @@ services:
 | Decision | Chosen | Why (not just what) |
 |----------|--------|-----|
 | React + Vite (not Next.js) | Separate Java backend makes SSR unnecessary. Vite is faster for SPA dev. No SEO needed (app is behind auth for personal features) |
-| Spring Boot 3.4 (not Quarkus) | Most mature Java framework. Spring AI for OpenAI. Virtual threads solve async. Matches work stack |
+| Spring Boot 3.5 (not Quarkus) | Most mature Java framework. Spring AI for OpenAI. Virtual threads solve async. Matches work stack |
 | DynamoDB (not Postgres) | Learning goal. Single-table design is a valuable skill. Free tier is generous. Forces access-pattern-first thinking |
 | On-demand capacity (not provisioned) | Simpler. No capacity planning. Cost is negligible at personal project scale. Avoids throttling surprises |
 | OpenAI (not Bedrock/local models) | Best embeddings quality/cost. Spring AI has first-class support. gpt-4o-mini is cheap. Works outside AWS |

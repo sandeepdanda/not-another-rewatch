@@ -7,7 +7,7 @@ services:
       - SERVICES=dynamodb
       - DEFAULT_REGION=us-west-2
     volumes:
-      - "./infra/init-dynamodb.sh:/etc/localstack/init/ready.d/init-dynamodb.sh"
+      - "./init-dynamodb.sh:/etc/localstack/init/ready.d/init-dynamodb.sh"
       - localstack_data:/var/lib/localstack
 
 volumes:

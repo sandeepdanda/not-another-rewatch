@@ -2,7 +2,7 @@
 
 Stop rewatching the same stuff. Let AI find you something new.
 
-> **Status:** Early development - [see the roadmap](docs/phase-plan.md)
+> **Status:** Early development - [see the roadmap](docs/spec/phase-plan.md)
 
 ---
 
@@ -38,33 +38,29 @@ graph LR
 | | Technology |
 |-|-----------|
 | Frontend | React 18, TypeScript, Vite, TanStack Query, Tailwind, shadcn/ui |
-| Backend | Java 21, Spring Boot 3.4, Spring AI, AWS SDK v2 |
-| Database | DynamoDB - [single-table design](docs/research-dynamodb-design.md) |
+| Backend | Java 21, Spring Boot 3.5, Spring AI, AWS SDK v2 |
+| Database | DynamoDB - [single-table design](docs/research/research-dynamodb-design.md) |
 | AI | OpenAI embeddings + chat, vector similarity search |
 | Data | 45K+ movies from [Kaggle](https://www.kaggle.com/datasets/rounakbanik/the-movies-dataset) + TMDB API enrichment |
 
 ### Getting Started
 
-The full app is under development. The data pipeline is functional today:
-
 ```bash
 # Clone and set up
 git clone <repo-url>
 cd not-another-rewatch
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
 
-# Download the dataset
-# https://www.kaggle.com/datasets/rounakbanik/the-movies-dataset
-# Place CSV files in data/
+# Start the dev environment (DynamoDB via LocalStack)
+cd infra/docker && docker compose up -d && cd ../..
 
-# Run the ETL pipeline (requires PostgreSQL)
-python -m etl.extract
-python -m etl.transform
-python -m etl.load
+# Backend (requires Java 21 - managed by mise)
+cd backend && ./gradlew bootRun
+
+# Frontend
+cd frontend && npm install && npm run dev
 ```
 
-**Prerequisites:** Python 3.10+, PostgreSQL 15+
+**Prerequisites:** Docker, Node 18+, Java 21 (auto-managed via [mise](https://mise.jdx.dev/))
 
 ### Key Design Decisions
 
