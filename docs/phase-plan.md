@@ -31,22 +31,29 @@ A full-stack movie discovery and tracking platform with AI-powered search, recom
 
 ---
 
-## Phase 1: Project Setup & DynamoDB Design (week 1)
+## Phase 1: Project Setup & DynamoDB Design (week 1) ✅
+
+**Status:** Complete (2026-04-14)
 
 **Goal:** Solid foundation - monorepo structure, Docker dev environment, DynamoDB table design.
 
 **Tasks:**
-- Set up monorepo structure: `/backend` (Spring Boot), `/frontend` (React+TS), `/etl` (existing Python), `/infra` (Docker, IaC)
-- Initialize Spring Boot project (Java 21, Spring Web, Spring AI, AWS SDK v2)
-- Initialize React+TS project with Vite, TanStack Query, Tailwind, shadcn/ui
-- Docker Compose: LocalStack (DynamoDB), Spring Boot, React dev server
-- Design DynamoDB schema:
+- [x] Set up monorepo structure: `/backend` (Spring Boot), `/frontend` (React+TS), `/etl` (existing Python), `/infra` (Docker, IaC)
+- [x] Initialize Spring Boot project (Java 21, Spring Web, Spring AI, AWS SDK v2)
+- [x] Initialize React+TS project with Vite, TanStack Query, Tailwind, shadcn/ui
+- [x] Docker Compose: LocalStack (DynamoDB), Spring Boot, React dev server
+- [x] Design DynamoDB schema:
   - **MovieCatalog table** (single-table): movies, genres, persons, cast, crew, companies, countries
   - **UserActivity table**: watchlist, ratings, viewing diary
   - 3 GSIs: entity lookup (genre/person/decade browsing), popularity/rating sorting, user-movie reverse lookup
   - Document all access patterns and key designs
 
 **Deliverable:** `docker compose up` starts the full dev environment. DynamoDB tables created via LocalStack.
+
+**Notes:**
+- Spring Boot 3.5.0 (3.4.x no longer on Spring Initializr)
+- LocalStack pinned to 3.8 (latest requires paid license now)
+- Java 21 managed via mise, scoped to project (.mise.toml)
 
 **Learning focus:** DynamoDB single-table design, access pattern thinking, adjacency list pattern for many-to-many relationships.
 
