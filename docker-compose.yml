@@ -1,0 +1,14 @@
+services:
+  localstack:
+    image: localstack/localstack:3.8
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=dynamodb
+      - DEFAULT_REGION=us-west-2
+    volumes:
+      - "./infra/init-dynamodb.sh:/etc/localstack/init/ready.d/init-dynamodb.sh"
+      - localstack_data:/var/lib/localstack
+
+volumes:
+  localstack_data:
