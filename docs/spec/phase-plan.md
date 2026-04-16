@@ -140,13 +140,15 @@ A full-stack movie discovery and tracking platform with AI-powered search, recom
 - [x] Browse page: genre filter chips, decade filter, sort toggle
 - [x] Person page: filmography grid
 
-### Phase 4c: TMDB Posters & Visual Polish
-- TMDB API integration (poster URLs, backdrops, trailers)
-- Real poster images replacing colored placeholders
-- Movie backdrop on detail page
-- Responsive design: mobile-first grid layout
-- Skeleton loading states
-- Dark mode toggle
+### Phase 4c: TMDB Posters & Visual Polish ✅
+
+**Status:** Complete (2026-04-16). Skeleton loading, dark mode, responsive polish deferred.
+
+- [x] TMDB API integration (poster URLs via enrich_posters.py)
+- [x] Real poster images replacing colored placeholders
+- [x] Movie detail page: poster + details side-by-side layout
+- [x] Lazy loading on poster images
+- [ ] Responsive polish, skeleton loading, dark mode (deferred)
 
 **Deliverable:** Browsable movie app with real posters, filtering, sorting. Looks good on mobile and desktop.
 
