@@ -5,6 +5,7 @@ import dev.sandeep.rewatch.movie.model.MovieResponse;
 import dev.sandeep.rewatch.movie.model.MovieSummary;
 import dev.sandeep.rewatch.movie.model.PersonResponse;
 import dev.sandeep.rewatch.movie.repository.MovieRepository;
+import dev.sandeep.rewatch.movie.repository.TitleSearchIndex;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +16,18 @@ import java.util.Optional;
 public class MovieService {
 
     private final MovieRepository repository;
+    private final TitleSearchIndex searchIndex;
 
-    public MovieService(MovieRepository repository) {
+    public MovieService(MovieRepository repository, TitleSearchIndex searchIndex) {
         this.repository = repository;
+        this.searchIndex = searchIndex;
+    }
+
+    public List<MovieSummary> searchByTitle(String query, int limit) {
+        return searchIndex.search(query, limit).stream()
+                .map(e -> new MovieSummary(e.id(), e.title(), e.releaseYear(),
+                        e.voteAvg(), e.popularity(), e.posterUrl()))
+                .toList();
     }
 
     /**

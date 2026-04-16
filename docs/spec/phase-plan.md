@@ -156,19 +156,23 @@ A full-stack movie discovery and tracking platform with AI-powered search, recom
 
 ---
 
-## Phase 5: Search & Filtering (week 7)
+## Phase 5: Search & Filtering (week 7) ✅
 
-**Goal:** Users can find movies by title, with smart filtering and sorting.
+**Status:** Complete (2026-04-16). Advanced filters and recent searches deferred.
 
 **Tasks:**
-- Backend: `GET /api/v1/search?q={query}` endpoint (DynamoDB prefix search on title)
-- Frontend: search bar in header with instant results dropdown
-- Debounced search with minimum 2 characters
-- Advanced filters: genre (multi-select), year range, rating range
-- Search results page with removable filter chips
-- Recent searches in localStorage
+- [x] Backend: `GET /api/v1/search?q={query}` endpoint (in-memory title index)
+- [x] In-memory title index loaded at startup (prefix + contains search, sorted by popularity)
+- [x] Frontend: search bar in header with instant results dropdown
+- [x] Debounced search (300ms) with minimum 2 characters
+- [x] Dropdown shows poster thumbnails, title, year, rating
+- [ ] Advanced filters: genre multi-select, year range, rating range (deferred)
+- [ ] Recent searches in localStorage (deferred)
 
-**Deliverable:** Working search and multi-filter browsing.
+**Notes:**
+- Used in-memory index instead of DynamoDB scan - loads all #METADATA items at startup (~5MB for 45K movies)
+- Contains search (not just prefix) sorted by popularity for better results
+- Phase 6 semantic search will replace this for natural language queries
 
 **Learning focus:** DynamoDB query vs scan vs filter expressions, debouncing in React, URL state management.
 

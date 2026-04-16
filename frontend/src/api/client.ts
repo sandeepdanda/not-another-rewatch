@@ -25,4 +25,6 @@ export const api = {
   getPerson: (id: string) => get<PersonResponse>(`/persons/${id}`),
 
   getGenres: () => get<string[]>(`/genres`),
+
+  search: (q: string, limit = 10) => get<MovieSummary[]>(`/search?q=${encodeURIComponent(q)}&limit=${limit}`),
 };

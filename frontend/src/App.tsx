@@ -4,6 +4,7 @@ import { HomePage } from './pages/HomePage';
 import { MoviePage } from './pages/MoviePage';
 import { BrowsePage } from './pages/BrowsePage';
 import { PersonPage } from './pages/PersonPage';
+import { SearchBar } from './components/SearchBar';
 import './index.css';
 
 const queryClient = new QueryClient({
@@ -20,6 +21,7 @@ function Nav() {
           🎬 Not Another Rewatch
         </Link>
         <div className="flex gap-4">
+          <SearchBar />
           <Link to="/" className="text-zinc-400 hover:text-white">Home</Link>
           <Link to="/browse" className="text-zinc-400 hover:text-white">Browse</Link>
         </div>
