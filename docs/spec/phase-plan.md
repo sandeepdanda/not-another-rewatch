@@ -123,25 +123,34 @@ A full-stack movie discovery and tracking platform with AI-powered search, recom
 
 ---
 
-## Phase 4: React Frontend Foundation (weeks 5-6)
+## Phase 4: React Frontend Foundation (weeks 5-6) - IN PROGRESS
 
 **Goal:** Movie browsing UI - the visual layer that makes the project demoable.
 
-**Tasks:**
-- App shell: layout, navigation, routing (TanStack Router)
-- Home page: featured/popular movies grid with poster images
-- Movie detail page: poster, overview, cast list, crew, genres, stats (rating, revenue, runtime)
-- Browse page: genre filter chips, decade filter, sort by rating/popularity
-- Infinite scroll for movie lists (TanStack Query `useInfiniteQuery`)
-- Skeleton loading states for all data-fetching components
+### Phase 4a: Setup & API Layer ✅
+- [x] Tailwind CSS + Vite plugin setup
+- [x] React Router for page routing
+- [x] TanStack Query for data fetching
+- [x] Typed API client layer (fetch calls matching backend endpoints)
+
+### Phase 4b: Core Pages ✅
+- [x] App shell: layout, navigation bar, routing
+- [x] Home page: top rated movies grid
+- [x] Movie detail page: overview, cast, crew, genres, stats
+- [x] Browse page: genre filter chips, decade filter, sort toggle
+- [x] Person page: filmography grid
+
+### Phase 4c: TMDB Posters & Visual Polish
+- TMDB API integration (poster URLs, backdrops, trailers)
+- Real poster images replacing colored placeholders
+- Movie backdrop on detail page
 - Responsive design: mobile-first grid layout
-- Image handling: lazy loading, fallback placeholders (no TMDB posters yet - use colored placeholders with movie initials)
-- Dark mode toggle (Tailwind dark mode)
-- API client layer with typed responses (generated from OpenAPI spec or hand-written)
+- Skeleton loading states
+- Dark mode toggle
 
-**Deliverable:** Browsable movie app with filtering, sorting, infinite scroll. Looks good on mobile and desktop.
+**Deliverable:** Browsable movie app with real posters, filtering, sorting. Looks good on mobile and desktop.
 
-**Learning focus:** React component architecture, TypeScript with React (generics, discriminated unions), TanStack Query patterns, responsive Tailwind layouts.
+**Learning focus:** React component architecture, TypeScript with React, TanStack Query patterns, responsive Tailwind layouts, third-party API integration.
 
 ---
 
@@ -150,214 +159,116 @@ A full-stack movie discovery and tracking platform with AI-powered search, recom
 **Goal:** Users can find movies by title, with smart filtering and sorting.
 
 **Tasks:**
-- Backend: `GET /api/v1/search?q={query}` endpoint
-  - Start with DynamoDB prefix search on title (GSI on title field)
-  - Debounced search with minimum 2 characters
+- Backend: `GET /api/v1/search?q={query}` endpoint (DynamoDB prefix search on title)
 - Frontend: search bar in header with instant results dropdown
-- Advanced filters panel: genre (multi-select), year range, rating range, runtime range
-- Combined filter + sort queries (DynamoDB filter expressions on GSI queries)
-- Search results page with result count, applied filters shown as removable chips
-- Recent searches stored in localStorage
-- "No results" state with suggestions
+- Debounced search with minimum 2 characters
+- Advanced filters: genre (multi-select), year range, rating range
+- Search results page with removable filter chips
+- Recent searches in localStorage
 
-**Deliverable:** Working search and multi-filter browsing. Fast prefix search on titles.
+**Deliverable:** Working search and multi-filter browsing.
 
-**Learning focus:** DynamoDB query vs scan vs filter expressions, debouncing in React, URL state management for filters.
+**Learning focus:** DynamoDB query vs scan vs filter expressions, debouncing in React, URL state management.
 
 ---
 
 ## Phase 6: AI - Embeddings & Semantic Search (weeks 8-9)
 
-**Goal:** "Movies about loneliness in space" actually works. AI-powered search that understands meaning, not just keywords.
+**Goal:** "Movies about loneliness in space" actually works.
 
 **Tasks:**
-- Python script: generate embeddings for all 600K movies
-  - Input per movie: title + overview + genres + top cast + director
-  - Model: OpenAI text-embedding-3-small (1536 dimensions)
-  - Batch API for cost efficiency (~$2.40 total)
-  - Store vectors in S3 Vectors (or Pinecone free tier)
+- Python script: generate embeddings for all movies (OpenAI text-embedding-3-small)
 - Backend: semantic search endpoint `GET /api/v1/search/semantic?q={query}`
-  - Embed user query -> query vector store -> return top-N movie IDs -> batch-get from DDB
-  - Spring AI integration for OpenAI calls
 - Backend: similar movies endpoint `GET /api/v1/movies/{id}/similar`
-  - Get movie's embedding -> find nearest neighbors -> return results
-  - Precompute top-20 similar movies per movie and cache in DDB for fast reads
-- Frontend: toggle between "Title search" and "AI search" in search bar
+- Frontend: toggle between "Title search" and "AI search"
 - Frontend: "Similar Movies" section on movie detail page
-- Hybrid search: combine title prefix match + semantic results, deduplicate
+- Hybrid search: combine title prefix match + semantic results
 
-**Deliverable:** Semantic search that understands natural language queries. "Similar movies" on every detail page.
+**Deliverable:** Semantic search that understands natural language. Similar movies on every detail page.
 
-**Learning focus:** Embeddings, vector similarity search, hybrid search ranking, Spring AI, batch processing at scale.
+**Learning focus:** Embeddings, vector similarity search, Spring AI, batch processing at scale.
 
 ---
 
 ## Phase 7: AI - Movie Discovery Chat (weeks 10-11)
 
-**Goal:** Conversational AI that helps users discover movies based on mood, preferences, and natural language.
+**Goal:** Conversational AI that helps users discover movies.
 
 **Tasks:**
 - Backend: chat endpoint `POST /api/v1/chat` with SSE streaming
-  - RAG pipeline: user message -> extract intent -> semantic search for relevant movies -> build context -> LLM generates response grounded in real movie data
-  - System prompt: movie expert persona, always references actual movies from the database
-  - Conversation memory (last 10 messages in session)
-  - Tool use: LLM can call search/filter functions to find specific movies
-- Frontend: chat UI (assistant-ui library or custom)
-  - Slide-out chat panel accessible from any page
-  - Streaming message display
-  - Movie cards inline in chat responses (clickable, link to detail page)
-  - Suggested prompts: "Movies like Inception but funnier", "Best sci-fi from the 90s", "Something to watch on a rainy day"
-- AI-generated movie insights on detail page:
-  - "Why you might like this" (based on movie attributes)
-  - "Movies in conversation with this one" (thematic connections)
+- RAG pipeline: user message → semantic search → LLM response grounded in real data
+- Conversation memory (last 10 messages)
+- Frontend: chat panel with streaming messages and inline movie cards
+- Suggested prompts: "Movies like Inception but funnier"
 
-**Deliverable:** Working movie chatbot that gives grounded recommendations with real movie data. Streaming responses.
+**Deliverable:** Working movie chatbot with grounded recommendations. Streaming responses.
 
-**Learning focus:** RAG architecture, prompt engineering, SSE streaming in Spring Boot, chat UX patterns, grounding AI responses in structured data.
+**Learning focus:** RAG architecture, prompt engineering, SSE streaming in Spring Boot, chat UX.
 
 ---
 
 ## Phase 8: User Features - Auth, Watchlist, Ratings (weeks 12-13)
 
-**Goal:** Personal movie tracking - the feature that makes users come back.
+**Goal:** Personal movie tracking.
 
 **Tasks:**
 - Backend: JWT authentication (Spring Security 6)
-  - `POST /api/v1/auth/register`, `POST /api/v1/auth/login`, `POST /api/v1/auth/refresh`
-  - Password hashing with BCrypt
-  - Stateless JWT validation on protected endpoints
-  - Public endpoints (browse, search) remain unauthenticated
-- DynamoDB UserActivity table operations:
-  - Watchlist: add/remove movies, list user's watchlist
-  - Ratings: rate a movie (0.5-10 scale), update rating, list user's ratings
-  - Diary: "I watched this on this date" entries with optional review text
-- Backend endpoints:
-  - `POST/DELETE /api/v1/watchlist/{movieId}`
-  - `POST/PUT /api/v1/ratings/{movieId}`
-  - `POST /api/v1/diary` (log a watch)
-  - `GET /api/v1/me/watchlist`, `/me/ratings`, `/me/diary`
-- Frontend: auth flow (login/register pages, auth context, protected routes)
-- Frontend: watchlist button on movie cards and detail page
-- Frontend: star rating component on movie detail page
-- Frontend: diary entry modal ("I watched this today")
-- Frontend: profile page with watchlist, ratings, diary tabs
+- DynamoDB UserActivity table: watchlist, ratings, diary entries
+- Frontend: auth flow, watchlist button, star rating, diary modal, profile page
 
-**Deliverable:** Users can create accounts, build watchlists, rate movies, and log what they've watched.
+**Deliverable:** Users can create accounts, build watchlists, rate movies, log watches.
 
-**Learning focus:** Spring Security with JWT, DynamoDB for user-specific data (PK=USER#id patterns), React auth patterns, optimistic UI updates.
+**Learning focus:** Spring Security with JWT, DynamoDB user data patterns, React auth, optimistic UI.
 
 ---
 
 ## Phase 9: Personal Stats & AI Insights (week 14)
 
-**Goal:** "Your year in movies" - personalized analytics that make tracking feel rewarding.
+**Goal:** "Your year in movies" - personalized analytics.
 
 **Tasks:**
-- Backend: stats aggregation endpoint `GET /api/v1/me/stats`
-  - Total movies watched, average rating, total runtime
-  - Genre breakdown (pie chart data)
-  - Rating distribution (histogram data)
-  - Most-watched directors/actors
-  - Watching streak (consecutive days/weeks)
-  - Monthly activity heatmap data
-- AI-powered taste profile:
-  - Analyze user's ratings to build a taste embedding (weighted average of rated movie embeddings)
-  - "Your taste profile: You lean toward 90s sci-fi with ensemble casts and dark humor"
-  - Personalized recommendations based on taste profile (not just similar-to-last-watched)
-- Frontend: stats dashboard page with charts (recharts or chart.js)
-  - Genre pie chart, rating histogram, monthly activity heatmap
-  - "Your taste" card with AI-generated description
-  - "Recommended for you" section powered by taste profile
-- Import from Letterboxd: CSV upload that parses Letterboxd export format and creates diary/rating entries
+- Backend: stats aggregation (genre breakdown, rating distribution, streaks)
+- AI taste profile from user's ratings
+- Frontend: stats dashboard with charts
+- Letterboxd CSV import
 
-**Deliverable:** Rich personal stats dashboard. AI understands your taste. Letterboxd import works.
+**Deliverable:** Rich personal stats. AI understands your taste.
 
-**Learning focus:** Data aggregation patterns in DynamoDB (precompute vs query-time), data visualization in React, personalization with embeddings.
+**Learning focus:** Data aggregation in DynamoDB, data visualization, personalization with embeddings.
 
 ---
 
-## Phase 10: TMDB Enrichment & Media (weeks 15-16)
+## Phase 10: Testing & Quality (week 15)
 
-**Goal:** Real posters, trailers, and fresh data from TMDB API.
+**Goal:** Confidence that everything works.
 
 **Tasks:**
-- Backend: TMDB API integration service
-  - Map Kaggle movie IDs to TMDB IDs (via links.csv or TMDB search)
-  - Fetch: poster URLs, backdrop URLs, trailer YouTube IDs, watch providers, updated ratings
-  - `append_to_response` for efficient single-request fetching
-  - Rate limiting: respect 40 req/sec soft limit
-- Background enrichment job (Spring @Scheduled):
-  - Priority queue: enrich popular movies first
-  - Daily incremental sync via TMDB `/movie/changes` endpoint
-  - Store enriched data in DDB (add attributes to existing movie items)
-- Frontend updates:
-  - Real poster images (TMDB image CDN)
-  - Movie backdrop on detail page
-  - "Watch on" section (streaming providers from TMDB)
-  - Trailer embed (YouTube) on detail page
-- Image optimization: responsive image sizes, blur-up placeholder loading
+- Backend: unit tests (JUnit 5 + Mockito), integration tests (Testcontainers + LocalStack)
+- Frontend: component tests (Vitest), E2E tests (Playwright)
+- ETL: pytest for transform functions
+- Target: 80%+ service layer coverage, 3-5 E2E scenarios
 
-**Deliverable:** Movies have real posters, trailers, and streaming provider info. Data stays fresh via daily sync.
+**Deliverable:** Comprehensive test suite. CI runs all tests.
 
-**Learning focus:** Third-party API integration, background job scheduling, rate limiting, image optimization.
+**Learning focus:** Testing strategy, Testcontainers, Playwright.
 
 ---
 
-## Phase 11: Testing & Quality (week 17)
+## Phase 11: Deploy, CI/CD & Portfolio Polish (weeks 16-17)
 
-**Goal:** Confidence that everything works. Test coverage that impresses reviewers.
-
-**Tasks:**
-- Backend:
-  - Unit tests for all service classes (JUnit 5 + Mockito)
-  - Integration tests for DDB repositories (Testcontainers + LocalStack)
-  - Controller slice tests (@WebMvcTest)
-  - AI integration tests (mock OpenAI responses)
-  - Target: 80%+ line coverage on service layer
-- Frontend:
-  - Component tests for key UI components (Vitest + React Testing Library)
-  - Hook tests for custom hooks (TanStack Query wrappers)
-  - MSW (Mock Service Worker) for API mocking in tests
-  - E2E tests for critical flows: search, movie detail, auth, watchlist (Playwright)
-  - Target: 3-5 E2E scenarios covering the happy paths
-- Data pipeline:
-  - pytest for ETL transform functions
-  - Validation checks on DDB load output
-
-**Deliverable:** Comprehensive test suite. CI runs all tests on every PR.
-
-**Learning focus:** Testing strategy (unit vs integration vs E2E), Testcontainers, MSW, Playwright, test-driven confidence.
-
----
-
-## Phase 12: Deploy, CI/CD & Portfolio Polish (weeks 18-19)
-
-**Goal:** Live on the internet. README that makes people want to try it.
+**Goal:** Live on the internet with a polished README.
 
 **Tasks:**
-- CI/CD (GitHub Actions):
-  - Backend: build Java, run tests with LocalStack service container, build Docker image
-  - Frontend: build, run Vitest, run Playwright
-  - Deploy on merge to main
-- Deployment:
-  - Backend: Render (Docker deploy, JVM tuned with `-Xmx256m -XX:+UseZGC`)
-  - Frontend: Vercel (auto-deploy from GitHub)
-  - DynamoDB: AWS free tier (25GB storage, 25 RCU/WCU)
-  - S3 Vectors: AWS (pay-per-use, minimal cost)
-- Infrastructure as Code: AWS CDK (Java) for DynamoDB tables, S3 Vectors bucket
-- README overhaul:
-  - Architecture diagram (mermaid)
-  - Demo GIF/video showing key features
-  - "Try it live" link
-  - Tech stack badges
-  - Setup instructions (docker compose up)
-  - API documentation link (Swagger)
-- Performance: Lighthouse audit on frontend, API response time benchmarks
-- Security review: no secrets in code, environment variables for all config, CORS configured
+- CI/CD: GitHub Actions (build, test, deploy on merge)
+- Deploy: Render (backend), Vercel (frontend), AWS DynamoDB free tier
+- AWS CDK for DynamoDB tables
+- README: demo GIF, "try it live" link, architecture diagram, setup instructions
+- Performance: Lighthouse audit, API benchmarks
+- Security review
 
 **Deliverable:** Live demo at a public URL. Polished README. One-command local setup.
 
-**Learning focus:** CI/CD pipelines, Docker multi-stage builds, JVM tuning for containers, CDK (Java), production deployment.
+**Learning focus:** CI/CD, Docker, JVM tuning, CDK, production deployment.
 
 ---
 
@@ -365,17 +276,17 @@ A full-stack movie discovery and tracking platform with AI-powered search, recom
 
 | Phase | What | Weeks | Key Learning |
 |-------|------|-------|-------------|
-| 1 | Project Setup & DDB Design | 1 | DynamoDB single-table design |
-| 2 | ETL to DynamoDB | 2 | Batch writes, denormalization |
-| 3 | Java API Foundation | 3-4 | Spring Boot, AWS SDK v2, Testcontainers |
-| 4 | React Frontend Foundation | 5-6 | React+TS, TanStack Query, Tailwind |
+| 1 ✅ | Project Setup & DDB Design | 1 | DynamoDB single-table design |
+| 2 ✅ | ETL to DynamoDB | 2 | Batch writes, denormalization |
+| 3 ✅ | Java API Foundation | 3-4 | Spring Boot, AWS SDK v2 |
+| 4 | React Frontend + TMDB Posters | 5-6 | React+TS, TanStack Query, Tailwind, API integration |
 | 5 | Search & Filtering | 7 | DDB queries, debouncing, URL state |
 | 6 | AI Embeddings & Semantic Search | 8-9 | Embeddings, vector search, Spring AI |
 | 7 | AI Chat & Discovery | 10-11 | RAG, streaming, prompt engineering |
 | 8 | Auth, Watchlist, Ratings | 12-13 | Spring Security, JWT, user data in DDB |
 | 9 | Personal Stats & AI Insights | 14 | Aggregation, visualization, personalization |
-| 10 | TMDB Enrichment & Media | 15-16 | API integration, background jobs |
-| 11 | Testing & Quality | 17 | Testing strategy, Testcontainers, Playwright |
+| 10 | Testing & Quality | 15 | Testing strategy, Testcontainers, Playwright |
+| 11 | Deploy, CI/CD & Portfolio Polish | 16-17 | CI/CD, Docker, CDK, production deployment |
 | 12 | Deploy & Portfolio Polish | 18-19 | CI/CD, Docker, CDK, production ops |
 
 **Total: ~19 weeks** (at personal project pace, evenings/weekends - adjust as needed)
