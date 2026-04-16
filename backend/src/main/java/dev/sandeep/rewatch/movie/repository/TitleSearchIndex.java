@@ -73,4 +73,8 @@ public class TitleSearchIndex {
     public int size() {
         return titles.size();
     }
+
+    public TitleEntry getById(String movieId) {
+        return titles.get(movieId);
+    }
 }

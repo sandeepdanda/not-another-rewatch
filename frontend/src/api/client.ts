@@ -27,4 +27,6 @@ export const api = {
   getGenres: () => get<string[]>(`/genres`),
 
   search: (q: string, limit = 10) => get<MovieSummary[]>(`/search?q=${encodeURIComponent(q)}&limit=${limit}`),
+
+  semanticSearch: (q: string, limit = 10) => get<MovieSummary[]>(`/search/semantic?q=${encodeURIComponent(q)}&limit=${limit}`),
 };

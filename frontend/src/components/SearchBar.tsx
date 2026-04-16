@@ -9,6 +9,7 @@ export function SearchBar() {
   const [query, setQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
   const [open, setOpen] = useState(false);
+  const [aiMode, setAiMode] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   // Debounce: wait 300ms after typing stops
@@ -27,13 +28,20 @@ export function SearchBar() {
   }, []);
 
   const { data: results } = useQuery({
-    queryKey: ['search', debouncedQuery],
-    queryFn: () => api.search(debouncedQuery),
+    queryKey: ['search', debouncedQuery, aiMode],
+    queryFn: () => aiMode ? api.semanticSearch(debouncedQuery) : api.search(debouncedQuery),
     enabled: debouncedQuery.length >= 2,
   });
 
   return (
-    <div ref={ref} className="relative">
+    <div ref={ref} className="relative flex items-center gap-2">
+      <button
+        onClick={() => setAiMode(!aiMode)}
+        className={`text-xs px-2 py-1 rounded ${aiMode ? 'bg-purple-600 text-white' : 'bg-zinc-800 text-zinc-400'}`}
+        title={aiMode ? 'AI semantic search' : 'Title search'}
+      >
+        {aiMode ? '🧠 AI' : '🔤 Title'}
+      </button>
       <input
         type="text"
         value={query}

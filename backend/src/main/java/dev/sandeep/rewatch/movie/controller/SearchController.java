@@ -28,4 +28,11 @@ public class SearchController {
         }
         return movieService.searchByTitle(q, limit);
     }
+
+    @GetMapping("/semantic")
+    public List<MovieSummary> semanticSearch(
+            @RequestParam String q,
+            @RequestParam(defaultValue = "10") int limit) {
+        return movieService.semanticSearch(q, limit);
+    }
 }
