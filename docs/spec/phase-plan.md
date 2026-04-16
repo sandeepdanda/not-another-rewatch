@@ -90,30 +90,34 @@ A full-stack movie discovery and tracking platform with AI-powered search, recom
 
 ---
 
-## Phase 3: Java API Foundation (weeks 3-4)
+## Phase 3: Java API Foundation (weeks 3-4) ✅
+
+**Status:** Complete (2026-04-16). Cursor pagination, Swagger, and tests deferred to Phase 3b.
 
 **Goal:** Core REST API serving movie data from DynamoDB.
 
 **Tasks:**
-- Project structure: package-by-feature (`movie/`, `person/`, `genre/`, `common/`)
-- DynamoDB Enhanced Client setup with `@DynamoDbBean` entity classes
-- Repository layer wrapping DynamoDbTable operations
-- Core endpoints:
-  - `GET /api/v1/movies/{id}` - movie details with cast, crew, genres (single Query on PK)
-  - `GET /api/v1/movies` - browse movies with cursor-based pagination
-  - `GET /api/v1/movies?genre={name}` - filter by genre (GSI query)
-  - `GET /api/v1/movies?decade={decade}` - filter by decade (GSI query)
-  - `GET /api/v1/movies?sort=rating|popularity` - sorted lists (GSI query)
-  - `GET /api/v1/persons/{id}` - person details with filmography
-  - `GET /api/v1/genres` - list all genres
-- Global exception handler with consistent error responses
-- Request validation with Bean Validation
-- Caffeine cache for hot movie data (30min TTL)
-- OpenAPI docs via springdoc-openapi (Swagger UI at `/swagger-ui.html`)
-- Unit tests (JUnit 5 + Mockito) for service layer
-- Integration tests (Testcontainers + LocalStack) for repository layer
+- [x] Project structure: package-by-feature (`movie/`, `config/`)
+- [x] DynamoDB Enhanced Client setup with `@DynamoDbBean` entity classes
+- [x] Repository layer wrapping DynamoDbTable operations
+- [x] Core endpoints:
+  - [x] `GET /api/v1/movies/{id}` - movie details with cast, crew, genres (single Query on PK)
+  - [x] `GET /api/v1/movies?genre={name}` - filter by genre (GSI1 query)
+  - [x] `GET /api/v1/movies?decade={decade}` - filter by decade (GSI1 query)
+  - [x] `GET /api/v1/movies?sort=rating|popularity` - sorted lists (GSI2 query)
+  - [x] `GET /api/v1/persons/{id}` - person details with filmography (GSI1 query)
+  - [x] `GET /api/v1/genres` - list all genres
+- [x] Global exception handler with consistent error responses
+- [x] Caffeine cache for hot movie data (30min TTL, 10K max entries)
+- [ ] `GET /api/v1/movies` - cursor-based pagination (deferred)
+- [ ] OpenAPI docs via springdoc-openapi (deferred)
+- [ ] Unit tests / integration tests (deferred)
 
-**Deliverable:** Fully documented REST API serving movie data. Swagger UI live. Tests passing.
+**Notes:**
+- Spring Boot 3.5.0 with Java 21 virtual threads
+- Fixed @DynamoDbAttribute case mismatch (PK vs pk) - Enhanced Client defaults to lowercase
+- Added personName to GSI1 projection for person filmography lookup
+- AWS SDK BOM 2.31.1 for version management
 
 **Learning focus:** Spring Boot REST patterns, AWS SDK v2 Enhanced Client, cursor-based pagination with DynamoDB, Testcontainers.
 
