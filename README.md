@@ -2,7 +2,7 @@
 
 Stop rewatching the same stuff. Let AI find you something new.
 
-> **Status:** Feature complete (phases 1-9). Testing & deployment in progress.
+> **Status:** Feature complete. All 11 phases shipped.
 
 ---
 
@@ -20,28 +20,42 @@ Stop rewatching the same stuff. Let AI find you something new.
 
 - Browse 45K+ movies with real TMDB posters
 - Filter by genre, decade, sort by rating or popularity
-- Title search with instant dropdown results
+- Title search with instant dropdown results (press `/` to focus)
 - Semantic search powered by sentence-transformers (free, local, no API key)
 - AI chat with SSE streaming and clickable movie cards
 - Similar movies on every detail page (cosine similarity)
 - JWT auth with register/login
 - Watchlist and 5-star ratings stored in DynamoDB
 - Stats dashboard with rating distribution and top genres
-- Toast notifications, loading spinners, responsive design
+- Toast notifications, loading spinners, dark/light mode
 
 ## Architecture
 
-```
-┌─────────────┐     REST + SSE      ┌──────────────────┐     ┌───────────┐
-│  React + TS  │ ──────────────────> │  Spring Boot 3.5 │ ──> │ DynamoDB  │
-│  Vite + TW   │ <──────────────────│  Java 21         │     │ LocalStack│
-└─────────────┘                      └────────┬─────────┘     └───────────┘
-                                              │
-                                     ┌────────▼─────────┐
-                                     │ Embedding Server  │
-                                     │ sentence-transformers
-                                     │ (Python, port 8081)│
-                                     └──────────────────┘
+```mermaid
+graph LR
+    subgraph Frontend
+        React[React + TypeScript + Vite]
+    end
+
+    subgraph Backend
+        API[Spring Boot 3.5 / Java 21]
+        Auth[Spring Security + JWT]
+    end
+
+    subgraph Data
+        DDB[(DynamoDB)]
+        Vec[Vector Store]
+    end
+
+    subgraph AI
+        Embed[Embedding Server<br/>sentence-transformers]
+    end
+
+    React -->|REST + SSE| API
+    API --> DDB
+    API --> Vec
+    API --> Embed
+    API --> Auth
 ```
 
 ## Tech Stack
@@ -52,13 +66,13 @@ Stop rewatching the same stuff. Let AI find you something new.
 | Backend | Java 21, Spring Boot 3.5, Spring Security, JWT |
 | Database | DynamoDB (single-table design, 2 tables, 3 GSIs) |
 | AI/ML | sentence-transformers all-MiniLM-L6-v2 (384-dim, free, local) |
-| Data | 45K+ movies from Kaggle + TMDB poster enrichment |
+| Data | 45K+ movies from [Kaggle](https://www.kaggle.com/datasets/rounakbanik/the-movies-dataset) + TMDB poster enrichment |
 | Infra | Docker Compose, LocalStack, GitHub Actions CI |
 
 ## Getting Started
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/sandeepdanda/not-another-rewatch.git
 cd not-another-rewatch
 
 # Start DynamoDB (LocalStack)
@@ -88,9 +102,24 @@ Open `localhost:5173` and start browsing.
 - **Graceful degradation** - semantic search falls back to title search if the embedding server is down.
 - **SSE streaming** - chat responses stream word-by-word, ready for real LLM integration (Groq/OpenAI drop-in).
 
+## Project Structure
+
+```
+not-another-rewatch/
+├── backend/          # Spring Boot 3.5, Java 21
+├── frontend/         # React 18, TypeScript, Vite
+├── etl/              # Python data pipeline + embedding server
+├── infra/docker/     # Docker Compose + LocalStack
+├── docs/spec/        # Phase plan and design docs
+├── learning/         # TIL entries and concepts
+└── data/             # Pre-computed embeddings
+```
+
 ## Roadmap
 
-See [phase-plan.md](docs/spec/phase-plan.md) for the full roadmap. Phases 1-9 complete, testing and deployment remaining.
+See [phase-plan.md](docs/spec/phase-plan.md) for the full roadmap. All 11 phases complete.
+
+**Future ideas:** Real LLM chat (Groq/OpenAI), Letterboxd import, Redis cache, cloud deploy (Render + Vercel), full 45K movie embeddings.
 
 ## License
 
