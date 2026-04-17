@@ -308,21 +308,21 @@ A full-stack movie discovery and tracking platform with AI-powered search, recom
 
 ---
 
-## Phase 11: Deploy, CI/CD & Portfolio Polish (weeks 16-17)
+## Phase 11: Deploy, CI/CD & Portfolio Polish (weeks 16-17) ✅
 
-**Goal:** Live on the internet with a polished README.
+**Status:** Complete (2026-04-17). Cloud deploy (Render/Vercel) and CDK deferred.
+
+**Goal:** CI pipeline, Docker, polished README.
 
 **Tasks:**
-- CI/CD: GitHub Actions (build, test, deploy on merge)
-- Deploy: Render (backend), Vercel (frontend), AWS DynamoDB free tier
-- AWS CDK for DynamoDB tables
-- README: demo GIF, "try it live" link, architecture diagram, setup instructions
-- Performance: Lighthouse audit, API benchmarks
-- Security review
+- [x] GitHub Actions CI: backend build+test, frontend build (parallel jobs)
+- [x] Backend Dockerfile (multi-stage, Corretto 21 Alpine)
+- [x] README rewrite: architecture diagram, features list, getting started
+- [ ] Deploy to Render/Vercel (deferred)
+- [ ] AWS CDK for DynamoDB tables (deferred)
+- [ ] Demo GIF (deferred)
 
-**Deliverable:** Live demo at a public URL. Polished README. One-command local setup.
-
-**Learning focus:** CI/CD, Docker, JVM tuning, CDK, production deployment.
+**Deliverable:** CI pipeline, Docker-ready backend, polished README.
 
 ---
 
@@ -339,8 +339,8 @@ A full-stack movie discovery and tracking platform with AI-powered search, recom
 | 7 ✅ | AI Chat & Discovery | 10-11 | RAG, SSE streaming, chat UX |
 | 8 ✅ | Auth, Watchlist, Ratings | 12-13 | Spring Security, JWT, DDB user data |
 | 9 ✅ | Personal Stats & UI Polish | 14 | Aggregation, dark mode, toasts, spinners |
-| 10 | Testing & Quality | 15 | Testing strategy, Testcontainers, Playwright |
-| 11 | Deploy, CI/CD & Portfolio Polish | 16-17 | CI/CD, Docker, CDK, production deployment |
+| 10 ✅ | Testing & Quality | 15 | JUnit 5, Mockito, unit tests |
+| 11 ✅ | Deploy, CI/CD & Polish | 16-17 | GitHub Actions, Docker, README |
 | 12 | Deploy & Portfolio Polish | 18-19 | CI/CD, Docker, CDK, production ops |
 
 **Total: ~19 weeks** (at personal project pace, evenings/weekends - adjust as needed)

@@ -2,72 +2,96 @@
 
 Stop rewatching the same stuff. Let AI find you something new.
 
-> **Status:** Early development - [see the roadmap](docs/spec/phase-plan.md)
+> **Status:** Feature complete (phases 1-9). Testing & deployment in progress.
 
 ---
 
-### What It Does
+## What It Does
 
 🔍 **Semantic search** - "heist movies with dark humor" returns real results, not keyword matches
 
-💬 **AI movie chat** - "something like Inception but funnier" gets grounded recommendations
+💬 **AI movie chat** - describe what you're in the mood for, get streaming recommendations with poster cards
 
-📊 **Track & discover** - rate movies, build a watchlist, see your taste evolve over time
+📊 **Personal stats** - rate movies, build a watchlist, see your genre breakdown and rating distribution
 
-### Why I'm Building This
+🌙 **Dark/Light mode** - toggle between themes
 
-Every night, same story. I get home from work and college, heat up dinner, sit down, open Netflix... and begin the sacred 45-minute ritual of scrolling through every streaming app known to mankind. By the time I finally pick something, my food is cold, my motivation is gone, and I've settled on The Office for the 47th time.
+## Features
 
-I did the math. I spend more time *choosing* what to watch than actually watching it. That's not a hobby, that's a part-time job with no pay and terrible benefits.
+- Browse 45K+ movies with real TMDB posters
+- Filter by genre, decade, sort by rating or popularity
+- Title search with instant dropdown results
+- Semantic search powered by sentence-transformers (free, local, no API key)
+- AI chat with SSE streaming and clickable movie cards
+- Similar movies on every detail page (cosine similarity)
+- JWT auth with register/login
+- Watchlist and 5-star ratings stored in DynamoDB
+- Stats dashboard with rating distribution and top genres
+- Toast notifications, loading spinners, responsive design
 
-So I'm building the app I wish existed - one where I can say "give me something like Interstellar but less crying" and actually get a good answer. Not "you watched Breaking Bad, here's a cooking show." Real recommendations that understand vibes, not just genres.
+## Architecture
 
-### Architecture
-
-```mermaid
-graph LR
-    React[React + TS] -->|REST + SSE| API[Spring Boot + Java 21]
-    API --> DDB[DynamoDB]
-    API --> Vec[Vector Store]
-    API --> OpenAI[OpenAI API]
-    API --> TMDB[TMDB API]
+```
+┌─────────────┐     REST + SSE      ┌──────────────────┐     ┌───────────┐
+│  React + TS  │ ──────────────────> │  Spring Boot 3.5 │ ──> │ DynamoDB  │
+│  Vite + TW   │ <──────────────────│  Java 21         │     │ LocalStack│
+└─────────────┘                      └────────┬─────────┘     └───────────┘
+                                              │
+                                     ┌────────▼─────────┐
+                                     │ Embedding Server  │
+                                     │ sentence-transformers
+                                     │ (Python, port 8081)│
+                                     └──────────────────┘
 ```
 
-### Tech Stack
+## Tech Stack
 
-| | Technology |
-|-|-----------|
-| Frontend | React 18, TypeScript, Vite, TanStack Query, Tailwind, shadcn/ui |
-| Backend | Java 21, Spring Boot 3.5, Spring AI, AWS SDK v2 |
-| Database | DynamoDB - [single-table design](docs/research/research-dynamodb-design.md) |
-| AI | OpenAI embeddings + chat, vector similarity search |
-| Data | 45K+ movies from [Kaggle](https://www.kaggle.com/datasets/rounakbanik/the-movies-dataset) + TMDB API enrichment |
+| Layer | Technology |
+|-------|-----------|
+| Frontend | React 18, TypeScript, Vite, TanStack Query, Tailwind CSS |
+| Backend | Java 21, Spring Boot 3.5, Spring Security, JWT |
+| Database | DynamoDB (single-table design, 2 tables, 3 GSIs) |
+| AI/ML | sentence-transformers all-MiniLM-L6-v2 (384-dim, free, local) |
+| Data | 45K+ movies from Kaggle + TMDB poster enrichment |
+| Infra | Docker Compose, LocalStack, GitHub Actions CI |
 
-### Getting Started
+## Getting Started
 
 ```bash
-# Clone and set up
 git clone <repo-url>
 cd not-another-rewatch
 
-# Start the dev environment (DynamoDB via LocalStack)
+# Start DynamoDB (LocalStack)
 cd infra/docker && docker compose up -d && cd ../..
 
-# Backend (requires Java 21 - managed by mise)
+# Load test data (10 movies with posters and embeddings)
+cd etl && pip install -r requirements.txt && ./setup.sh && cd ..
+
+# Start embedding server (terminal 1)
+cd etl && python embedding_server.py
+
+# Start backend (terminal 2, requires Java 21)
 cd backend && ./gradlew bootRun
 
-# Frontend
+# Start frontend (terminal 3)
 cd frontend && npm install && npm run dev
 ```
 
-**Prerequisites:** Docker, Node 18+, Java 21 (auto-managed via [mise](https://mise.jdx.dev/))
+Open `localhost:5173` and start browsing.
 
-### Key Design Decisions
+**Prerequisites:** Docker, Node 18+, Java 21 (auto-managed via [mise](https://mise.jdx.dev/)), Python 3.10+
 
-- **DynamoDB single-table** - one query returns a movie with all its cast, crew, and genres using the adjacency list pattern. No JOINs needed.
-- **AI replaces full-text search** - DynamoDB can't do text search, so we use embeddings for semantic search instead. "Movies about existential dread in suburbia" just works.
-- **Graceful degradation** - every AI feature has a non-AI fallback. The app works fully without OpenAI.
+## Key Design Decisions
 
-### License
+- **DynamoDB single-table** - one query returns a movie with all its cast, crew, and genres. No JOINs.
+- **Free local embeddings** - sentence-transformers runs on CPU, no API key needed. Same model for document and query embedding.
+- **Graceful degradation** - semantic search falls back to title search if the embedding server is down.
+- **SSE streaming** - chat responses stream word-by-word, ready for real LLM integration (Groq/OpenAI drop-in).
+
+## Roadmap
+
+See [phase-plan.md](docs/spec/phase-plan.md) for the full roadmap. Phases 1-9 complete, testing and deployment remaining.
+
+## License
 
 MIT
