@@ -1,7 +1,7 @@
 <p align="center">
   <h1 align="center">🎬 Not Another Rewatch</h1>
   <p align="center">
-    <em>Because you've seen The Office enough times.</em>
+    <em>Because you've seen Friends enough times.</em>
     <br/>
     <strong>AI-powered movie discovery that actually gets you.</strong>
   </p>
@@ -19,7 +19,7 @@
 
 ## 🤔 The Problem
 
-Every night, same ritual. Open Netflix. Scroll for 45 minutes. Pick The Office again. Food gets cold. Dreams die quietly.
+Every night, same ritual. Open Netflix. Scroll for 45 minutes. Pick Friends again. Food gets cold. Dreams die quietly.
 
 ## 💡 The Solution
 
@@ -44,32 +44,23 @@ An app where you say *"dark crime thriller with plot twists"* and it actually un
 
 ```mermaid
 graph LR
-    subgraph 🖥️ Frontend
-        React[React + TypeScript + Vite]
-    end
-
-    subgraph ⚙️ Backend
-        API[Spring Boot 3.5 / Java 21]
-        Auth[Spring Security + JWT]
-    end
-
-    subgraph 💾 Data
-        DDB[(DynamoDB<br/>Single-Table Design)]
-        Vec[In-Memory<br/>Vector Store]
-    end
-
-    subgraph 🧠 AI
-        Embed[sentence-transformers<br/>all-MiniLM-L6-v2]
-    end
-
-    React -->|REST + SSE| API
-    API --> DDB
-    API --> Vec
-    API --> Embed
-    API --> Auth
+    React[React + TypeScript] -->|REST + SSE| API[Spring Boot 3.5]
+    API --> DDB[(DynamoDB)]
+    API --> Vec[Vector Store]
+    API --> Embed[Embedding Server]
+    API --> Auth[JWT Auth]
 ```
 
 > **Zero paid APIs.** The entire AI pipeline runs locally on CPU. No OpenAI key, no cloud ML service, no surprise bills.
+
+| Layer | Technology |
+|-------|-----------|
+| Frontend | React 18, TypeScript, Vite, TanStack Query, Tailwind CSS |
+| Backend | Java 21, Spring Boot 3.5, Spring Security, JWT |
+| Database | DynamoDB (single-table design, 2 tables, 3 GSIs) |
+| AI/ML | sentence-transformers all-MiniLM-L6-v2 (384-dim, free, local) |
+| Data | 45K+ movies from [Kaggle](https://www.kaggle.com/datasets/rounakbanik/the-movies-dataset) + TMDB poster enrichment |
+| Infra | Docker Compose, LocalStack, GitHub Actions CI |
 
 ---
 
@@ -101,26 +92,11 @@ Open **localhost:5173** → search "movies about time travel" → enjoy.
 
 ---
 
-## 🧩 Project Structure
-
-```
-not-another-rewatch/
-├── 🖥️  frontend/       React 18 + TypeScript + Tailwind
-├── ⚙️  backend/        Spring Boot 3.5 + Spring Security
-├── 🐍  etl/            Data pipeline + embedding server
-├── 🐳  infra/docker/   Docker Compose + LocalStack
-├── 📋  docs/           Phase plan + design decisions
-├── 📚  learning/       TIL entries (yes, I track what I learn)
-└── 📊  data/           Pre-computed movie embeddings
-```
-
----
-
 ## 🎯 Design Philosophy
 
 **1. DynamoDB single-table design** — One query, one movie, all its data. Cast, crew, genres, everything. No JOINs, no N+1 problems.
 
-**2. AI that doesn't cost money** — sentence-transformers runs on your CPU. 384 dimensions, 80MB model, zero API calls. The same model embeds both movies and your search queries.
+**2. AI that doesn't cost money** — sentence-transformers runs on your CPU. 384 dimensions, 80MB model, zero API calls.
 
 **3. Break gracefully** — Embedding server down? Falls back to title search. No auth token? Browse freely. Every feature degrades, nothing crashes.
 
@@ -128,38 +104,22 @@ not-another-rewatch/
 
 ---
 
-## 📈 The Journey
-
-Built in 11 phases, from empty repo to full-stack app. Every phase documented in [phase-plan.md](docs/spec/phase-plan.md).
+## 🧩 Project Structure
 
 ```
-Phase  1 ✅  Project Setup & DynamoDB Design
-Phase  2 ✅  ETL Pipeline (45K movies → DynamoDB)
-Phase  3 ✅  Java REST API
-Phase  4 ✅  React Frontend + TMDB Posters
-Phase  5 ✅  Title Search
-Phase  6 ✅  Semantic Search (free local AI)
-Phase  7 ✅  AI Chat + Similar Movies
-Phase  8 ✅  Auth + Watchlist + Ratings
-Phase  9 ✅  Stats Dashboard + UI Polish
-Phase 10 ✅  Testing
-Phase 11 ✅  CI/CD + Docker + README
+not-another-rewatch/
+├── frontend/       React 18 + TypeScript + Tailwind
+├── backend/        Spring Boot 3.5 + Spring Security
+├── etl/            Data pipeline + embedding server
+├── infra/docker/   Docker Compose + LocalStack
+├── docs/           Phase plan + design decisions
+└── data/           Pre-computed movie embeddings
 ```
-
----
-
-## 🔮 What's Next
-
-- [ ] Real LLM in chat (Groq free tier → Llama 3)
-- [ ] Full 45K movie embeddings
-- [ ] Letterboxd CSV import
-- [ ] Cloud deploy (Render + Vercel)
-- [ ] Demo GIF in this README
 
 ---
 
 <p align="center">
-  <em>Made with ❤️ and an mass amount of caffeine</em>
+  <em>Made with ❤️ and more caffeine than medically advisable</em>
   <br/>
   <em>No movies were rewatched in the making of this app 🍿</em>
 </p>
