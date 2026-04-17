@@ -341,7 +341,179 @@ A full-stack movie discovery and tracking platform with AI-powered search, recom
 | 9 ✅ | Personal Stats & UI Polish | 14 | Aggregation, dark mode, toasts, spinners |
 | 10 ✅ | Testing & Quality | 15 | JUnit 5, Mockito, unit tests |
 | 11 ✅ | Deploy, CI/CD & Polish | 16-17 | GitHub Actions, Docker, README |
-| 12 | Deploy & Portfolio Polish | 18-19 | CI/CD, Docker, CDK, production ops |
+| 12 | The Cookbook - Visual Identity | 18 | Typography, color theory, Framer Motion |
+| 13 | The Tasting Menu - Home & Browse | 19 | Hero sections, masonry grids, scroll animations |
+| 14 | The Chef's Table - Movie Detail | 20 | Editorial layouts, parallax, micro-interactions |
+| 15 | The Kitchen - Chat & Discovery | 21 | Conversational UI, card physics, ambient design |
+| 16 | The Wine List - Stats & Profile | 22 | Data visualization, animated reveals, achievements |
+| 17 | The Reservation - Auth & Onboarding | 23 | Onboarding flow, empty states, delight moments |
+
+---
+
+## Phase 12: The Cookbook - Visual Identity System
+
+**Inspiration:** High-end restaurant branding. A restaurant doesn't just serve food - it has a visual language. Fonts, colors, textures, spacing all tell a story before you read a word.
+
+**Goal:** Establish a premium visual identity that makes this app feel like a curated experience, not a database viewer.
+
+### 12a: Typography & Color Palette
+- Install Google Fonts: **Playfair Display** (headings - editorial, cinematic) + **Inter** (body - clean, modern)
+- New color system: deep navy base (`#0a0f1a`), warm amber accent (`#f59e0b`), soft cream text (`#faf5eb`), muted sage for secondary (`#6b8f71`)
+- Think wine bar, not Netflix. Rich, warm, inviting.
+- CSS custom properties for the full palette, easy theme switching
+
+### 12b: Framer Motion Foundation
+- Install `framer-motion` (free, MIT license)
+- Page transition animations (fade + subtle slide)
+- Staggered grid loading - cards appear one by one like dishes arriving at a table
+- Shared layout animations - clicking a movie card morphs into the detail page
+- Hover micro-interactions: cards lift with shadow, slight rotation on mouse position
+
+### 12c: Glass & Texture
+- Glassmorphism nav bar (backdrop-blur, semi-transparent)
+- Subtle grain texture overlay on backgrounds (CSS noise filter)
+- Gradient mesh backgrounds on hero sections
+- Card borders with subtle gradient glow on hover
+
+---
+
+## Phase 13: The Tasting Menu - Home & Browse Redesign
+
+**Inspiration:** Museum exhibit + fashion lookbook. Each section is curated, not just a grid dump. Think Apple product pages - every scroll reveals something new.
+
+**Goal:** Home page that tells a story. Browse page that feels like flipping through a beautifully designed magazine.
+
+### 13a: Home Page - The Grand Entrance
+- Hero section: full-width backdrop of a random top movie (blurred poster), with the movie title in large Playfair Display, tagline below, "Explore" CTA
+- "Staff Picks" section: horizontal scroll carousel with oversized cards (like a chef's tasting menu - 5 curated picks)
+- "Mood Boards" section: clickable mood tiles ("Rainy Sunday", "Date Night", "Mind-Bending", "Feel-Good Cry") - each is a pre-built semantic search
+- "Recently Added" section: masonry grid layout (Pinterest-style, varying card heights based on poster aspect ratio)
+- Scroll-triggered fade-in animations for each section
+
+### 13b: Browse Page - The Wine Wall
+- Replace flat grid with a filterable masonry layout
+- Genre chips become elegant pill buttons with icons (🔫 Action, 💕 Romance, 🧠 Sci-Fi, etc.)
+- Decade selector becomes a horizontal timeline you can scrub
+- "Surprise Me" button - picks a random movie with a card flip animation
+- Infinite scroll with staggered card entrance animations
+- Active filters shown as removable tags above the grid
+
+### 13c: Movie Cards - The Plating
+- Cards get a "tilt on hover" effect (CSS perspective transform based on mouse position)
+- Rating badge: small amber circle in the corner with the score
+- On hover: poster dims slightly, title + year + rating slide up from bottom (overlay)
+- Watchlist heart icon in the top-right corner (visible on hover, filled if in watchlist)
+- Skeleton loading cards with shimmer animation while data loads
+
+---
+
+## Phase 14: The Chef's Table - Movie Detail Redesign
+
+**Inspiration:** Long-form editorial design (like a New York Times feature article) + vinyl record sleeve art. The movie detail page should feel like you're reading a beautifully designed magazine spread about this film.
+
+**Goal:** Movie detail page that makes you want to linger, not just grab info and leave.
+
+### 14a: Hero & Layout
+- Full-width hero: poster as blurred background, sharp poster on the left, title + metadata on the right
+- Parallax scroll: background poster moves slower than content as you scroll down
+- Floating action bar: watchlist + rating + share buttons in a sticky pill that follows you down the page
+- Genre tags become colored pills matching a genre color map (Action=red, Comedy=amber, Horror=purple, etc.)
+
+### 14b: Content Sections as Courses
+- "The Story" (overview) - large, readable text with drop cap first letter
+- "The Cast" - horizontal scroll of circular avatar placeholders with name below (like a dinner party seating chart)
+- "Behind the Scenes" - crew in a minimal two-column layout
+- "The Numbers" - budget/revenue as a visual comparison bar (like a versus graphic)
+- "Similar Tastes" - similar movies in a horizontal scroll with peek-ahead (shows edge of next card)
+- Each section fades in on scroll with a subtle slide-up
+
+### 14c: Micro-interactions
+- Star rating: stars fill with a pour animation (like filling a wine glass)
+- Watchlist button: heart icon does a bounce animation on click
+- Share button: copies link with a confetti burst
+- Back button: smooth page transition back to the grid
+
+---
+
+## Phase 15: The Kitchen - Chat & Discovery Redesign
+
+**Inspiration:** A private conversation with a sommelier. Not a chatbot - a knowledgeable friend who happens to know every movie ever made. The UI should feel intimate, not clinical.
+
+**Goal:** Chat that feels like a premium experience, not a tech demo.
+
+### 15a: Chat Atmosphere
+- Dark ambient background with subtle animated gradient (slowly shifting deep navy/purple)
+- Messages appear with a typewriter effect (not just word-by-word, but with natural typing rhythm - faster for common words, slight pause before names)
+- User messages: minimal, right-aligned, no bubble - just text with a subtle left border
+- Assistant messages: left-aligned with a small film reel icon avatar
+
+### 15b: Movie Cards in Chat
+- Movie recommendations appear as horizontal "tasting cards" - poster on left, title + year + one-line hook on right
+- Cards slide in from the left with a stagger delay
+- Clicking a card does a smooth expand animation before navigating to the detail page
+- "More like this" quick-reply buttons below each recommendation set
+
+### 15c: Discovery Features
+- "Mood Dial" - a circular selector at the top of chat (like a thermostat) where you can set your mood before chatting: Chill ↔ Intense, Classic ↔ Modern, Familiar ↔ Adventurous
+- Suggested prompts appear as floating pills that gently bob (like bubbles)
+- Empty state: animated film strip that unrolls with the welcome message
+
+---
+
+## Phase 16: The Wine List - Stats & Profile Redesign
+
+**Inspiration:** Spotify Wrapped meets a sommelier's tasting journal. Your movie stats should feel like a personal achievement showcase, not a spreadsheet.
+
+**Goal:** Stats page that users screenshot and share. Profile that feels personal.
+
+### 16a: Animated Stats Reveal
+- Stats page loads with a "Your Year in Movies" intro animation
+- Numbers count up from 0 (animated counter)
+- Rating distribution: animated horizontal bars that grow from left to right on scroll
+- Genre breakdown: animated donut chart (CSS conic-gradient + animation)
+- "Your Taste Profile" card: radar chart showing preference axes (Action vs Drama, Classic vs Modern, etc.)
+
+### 16b: Achievement Badges
+- Unlock badges for milestones: "First Rating", "10 Movies Rated", "Genre Explorer" (rated 5+ genres), "Night Owl" (rated after midnight), "Critic" (average rating below 3)
+- Badges appear as small circular icons with a gold/silver/bronze tier
+- New badge unlock: celebratory animation with confetti
+- Badge shelf on profile page
+
+### 16c: Profile Page
+- User avatar (generated from initials, gradient background based on username hash)
+- "Member since" with days count
+- Favorite genre (auto-calculated)
+- Recent activity feed (last 5 ratings/watchlist adds)
+- "Taste Twin" - show which famous director's taste you match closest (based on genre preferences)
+
+---
+
+## Phase 17: The Reservation - Auth & Onboarding Redesign
+
+**Inspiration:** Luxury hotel check-in. The first impression sets the tone for everything.
+
+**Goal:** Auth flow that feels welcoming, not like a security checkpoint.
+
+### 17a: Login/Register Redesign
+- Split screen: left side has a rotating movie poster collage (auto-playing, slow crossfade), right side has the form
+- Form fields have floating labels that animate up on focus
+- Password strength indicator as a colored bar
+- "Sign In" button has a subtle shimmer effect
+- Success: confetti burst + redirect with a welcome toast
+
+### 17b: Onboarding Flow (New Users)
+- After first registration: 3-step onboarding
+  1. "Pick 3 genres you love" - large, tappable genre cards with icons
+  2. "Rate these 5 movies" - show 5 popular movies, quick star rating
+  3. "You're all set!" - personalized home page based on their picks
+- Skip button always available
+- Progress dots at the bottom
+
+### 17c: Empty States with Personality
+- Empty watchlist: illustration + "Your watchlist is emptier than a theater on a Tuesday afternoon. Let's fix that."
+- Empty ratings: "You haven't rated anything yet. We promise we won't judge. Much."
+- Empty stats: "Rate a few movies and we'll tell you things about yourself you didn't know."
+- No search results: "Even our AI couldn't find that one. Try something else?"
 
 **Total: ~19 weeks** (at personal project pace, evenings/weekends - adjust as needed)
 
