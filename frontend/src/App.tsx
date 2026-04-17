@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider, useAuth } from './auth/AuthContext';
 import { HomePage } from './pages/HomePage';
@@ -12,6 +13,7 @@ import { WatchlistPage } from './pages/WatchlistPage';
 import { StatsPage } from './pages/StatsPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { SearchBar } from './components/SearchBar';
+import { PageTransition } from './components/PageTransition';
 import './index.css';
 
 const queryClient = new QueryClient({
@@ -66,6 +68,25 @@ function Nav() {
   );
 }
 
+function AnimatedRoutes() {
+  const location = useLocation();
+  return (
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route path="/" element={<PageTransition><HomePage /></PageTransition>} />
+        <Route path="/browse" element={<PageTransition><BrowsePage /></PageTransition>} />
+        <Route path="/movie/:id" element={<PageTransition><MoviePage /></PageTransition>} />
+        <Route path="/persons/:id" element={<PageTransition><PersonPage /></PageTransition>} />
+        <Route path="/chat" element={<PageTransition><ChatPage /></PageTransition>} />
+        <Route path="/login" element={<PageTransition><LoginPage /></PageTransition>} />
+        <Route path="/watchlist" element={<PageTransition><WatchlistPage /></PageTransition>} />
+        <Route path="/stats" element={<PageTransition><StatsPage /></PageTransition>} />
+        <Route path="*" element={<PageTransition><NotFoundPage /></PageTransition>} />
+      </Routes>
+    </AnimatePresence>
+  );
+}
+
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
@@ -74,17 +95,7 @@ export default function App() {
           <div className="grain min-h-screen bg-primary text-cream">
             <Nav />
             <main className="mx-auto max-w-7xl px-6 py-12 relative z-10">
-              <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/browse" element={<BrowsePage />} />
-                <Route path="/movie/:id" element={<MoviePage />} />
-                <Route path="/persons/:id" element={<PersonPage />} />
-                <Route path="/chat" element={<ChatPage />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/watchlist" element={<WatchlistPage />} />
-                <Route path="/stats" element={<StatsPage />} />
-                <Route path="*" element={<NotFoundPage />} />
-              </Routes>
+              <AnimatedRoutes />
             </main>
             <footer className="relative z-10 border-t border-warm py-8 text-center text-sm text-muted">
               <p className="serif italic">Made with ❤️ and more caffeine than medically advisable</p>
