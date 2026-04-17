@@ -16,7 +16,7 @@ export function MovieCard({ movie }: { movie: MovieSummary }) {
 
   return (
     <Link to={`/movie/${movie.id}`} className="group">
-      <div className="aspect-[2/3] rounded-lg overflow-hidden mb-2 group-hover:ring-2 ring-white/30 transition">
+      <div className="aspect-[2/3] rounded-lg overflow-hidden mb-2 group-hover:ring-2 ring-white/30 group-hover:scale-105 transition-all duration-200">
         {hasPoster ? (
           <img
             src={`${TMDB_IMG}/w342${movie.posterUrl}`}

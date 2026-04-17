@@ -11,6 +11,19 @@ export function SearchBar() {
   const [open, setOpen] = useState(false);
   const [aiMode, setAiMode] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Press / to focus search
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === '/' && document.activeElement?.tagName !== 'INPUT' && document.activeElement?.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+        inputRef.current?.focus();
+      }
+    }
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
 
   // Debounce: wait 300ms after typing stops
   useEffect(() => {
@@ -43,11 +56,12 @@ export function SearchBar() {
         {aiMode ? '🧠 AI' : '🔤 Title'}
       </button>
       <input
+        ref={inputRef}
         type="text"
         value={query}
         onChange={e => { setQuery(e.target.value); setOpen(true); }}
         onFocus={() => setOpen(true)}
-        placeholder="Search movies..."
+        placeholder="Search movies... ( / )"
         className="w-48 sm:w-64 rounded-lg bg-zinc-800 px-3 py-1.5 text-sm text-zinc-200 placeholder-zinc-500 outline-none focus:ring-1 ring-zinc-600"
       />
 

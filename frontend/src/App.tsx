@@ -10,6 +10,7 @@ import { ChatPage } from './pages/ChatPage';
 import { LoginPage } from './pages/LoginPage';
 import { WatchlistPage } from './pages/WatchlistPage';
 import { StatsPage } from './pages/StatsPage';
+import { NotFoundPage } from './pages/NotFoundPage';
 import { SearchBar } from './components/SearchBar';
 import './index.css';
 
@@ -74,8 +75,12 @@ export default function App() {
                 <Route path="/login" element={<LoginPage />} />
               <Route path="/watchlist" element={<WatchlistPage />} />
               <Route path="/stats" element={<StatsPage />} />
+              <Route path="*" element={<NotFoundPage />} />
               </Routes>
             </main>
+            <footer className="border-t border-zinc-800 py-6 text-center text-sm text-zinc-600">
+              Made with ❤️ and way too much caffeine · No movies were rewatched in the making of this app 🍿
+            </footer>
           </div>
         </BrowserRouter>
       </AuthProvider>

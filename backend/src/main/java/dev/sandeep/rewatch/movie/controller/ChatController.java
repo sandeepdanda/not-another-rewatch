@@ -6,8 +6,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -17,6 +17,7 @@ public class ChatController {
 
     private final MovieService movieService;
     private final ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
+    private final Map<String, List<Map<String, String>>> sessions = new ConcurrentHashMap<>();
 
     public ChatController(MovieService movieService) {
         this.movieService = movieService;
@@ -25,20 +26,26 @@ public class ChatController {
     @PostMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter chat(@RequestBody Map<String, String> body) {
         String message = body.getOrDefault("message", "");
+        String sessionId = body.getOrDefault("sessionId", "default");
         var emitter = new SseEmitter(30_000L);
+
+        // Track conversation
+        var history = sessions.computeIfAbsent(sessionId, k -> new ArrayList<>());
+        history.add(Map.of("role", "user", "text", message));
+        if (history.size() > 20) history.subList(0, history.size() - 20).clear();
 
         executor.execute(() -> {
             try {
                 List<MovieSummary> movies = movieService.semanticSearch(message, 5);
 
-                // Stream the response token-by-token to simulate LLM streaming
-                String response = buildResponse(message, movies);
+                String response = buildResponse(message, movies, history);
                 for (String word : response.split("(?<=\\s)")) {
                     emitter.send(SseEmitter.event().data(word));
                     Thread.sleep(30);
                 }
 
-                // Send movie cards as structured data
+                history.add(Map.of("role", "assistant", "text", response));
+
                 if (!movies.isEmpty()) {
                     emitter.send(SseEmitter.event().name("movies").data(movies));
                 }
@@ -53,13 +60,19 @@ public class ChatController {
         return emitter;
     }
 
-    private String buildResponse(String query, List<MovieSummary> movies) {
+    private String buildResponse(String query, List<MovieSummary> movies, List<Map<String, String>> history) {
         if (movies.isEmpty()) {
             return "I couldn't find any movies matching that. Try a different description!";
         }
 
         var sb = new StringBuilder();
-        sb.append("Based on \"").append(query).append("\", here are my picks:\n\n");
+
+        // Acknowledge follow-up questions
+        if (history.size() > 2) {
+            sb.append("Here's what I found for \"").append(query).append("\":\n\n");
+        } else {
+            sb.append("Based on \"").append(query).append("\", here are my picks:\n\n");
+        }
 
         for (int i = 0; i < movies.size(); i++) {
             var m = movies.get(i);
@@ -69,8 +82,7 @@ public class ChatController {
             sb.append("\n");
         }
 
-        sb.append("\nWant me to find something more specific? ");
-        sb.append("Try describing the mood, genre, or themes you're looking for.");
+        sb.append("\nWant something different? Try describing the mood, era, or themes you're after.");
         return sb.toString();
     }
 }
